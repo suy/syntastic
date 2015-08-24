@@ -626,7 +626,7 @@ endfunction " }}}2
 function! s:_skip_file() abort " {{{2
     let fname = expand('%', 1)
     let skip = get(b:, 'syntastic_skip_checks', 0) || (&buftype !=# '') ||
-        \ !filereadable(fname) || getwinvar(0, '&diff') || s:_ignore_file(fname) ||
+        \ !filereadable(fname) || s:_ignore_file(fname) ||
         \ fnamemodify(fname, ':e') =~? g:syntastic_ignore_extensions
     if skip
         call syntastic#log#debug(g:_SYNTASTIC_DEBUG_TRACE, '_skip_file: skipping checks')
@@ -648,9 +648,6 @@ function! s:_explain_skip(filetypes) abort " {{{2
         endif
         if !filereadable(fname)
             call add(why, 'file not readable / not local')
-        endif
-        if getwinvar(0, '&diff')
-            call add(why, 'diff mode')
         endif
         if s:_ignore_file(fname)
             call add(why, 'filename matching g:syntastic_ignore_files')
